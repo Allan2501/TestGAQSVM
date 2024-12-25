@@ -1,0 +1,1 @@
+{"generator_func": "by_num_rotations_and_cnot", "fitness_func": "Define_Eval_QSVC", "crossover_func": "crossover_func", "mutate_func": "bitflip_mutate_func", "selection_func": "elitist_selection", "threshold_func": "synthesis_threshold"}
