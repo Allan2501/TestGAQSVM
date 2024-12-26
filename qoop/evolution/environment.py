@@ -161,14 +161,17 @@ class EEnvironment():
             ######## Cost #######
             #####################
             # new_population = multiple_compile(new_population)
+            self.fitnesss = []
             if mode == 'parallel':
-                self.fitnesss = []
                 fitnesss_temp = multiple_compile(self.fitness_func, self.circuits)
                 self.fitnesss.extend(fitnesss_temp)
             else:
                 for i in range(len(self.circuits)):
+                    print(self.circuits[i])
                     self.fitnesss.append(self.fitness_func(self.circuits[i]))
+                    
             self.metadata.best_fitnesss.append(np.max(self.fitnesss))
+
             self.best_circuits.append(self.circuits[np.argmax(self.fitnesss)])
             if self.best_circuit is None:
                 self.best_circuit = self.best_circuits[0]
@@ -207,7 +210,7 @@ class EEnvironment():
                     self.circuits[i], self.circuits[i + 1])
                 new_circuits.extend(
                     [self.circuits[i], self.circuits[i + 1], offspring1, offspring2])
-
+                
             ####################
             ##### Mutation #####
             ####################
@@ -219,6 +222,7 @@ class EEnvironment():
             ##### Post-process ##
             #####################
             self.circuits = new_circuits
+            print("Số circuit", len(self.circuits))
             self.circuitss.append(new_circuits)
             if auto_save:
                 self.save()      

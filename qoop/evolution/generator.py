@@ -234,7 +234,7 @@ def by_num_rotations_and_cnot(metadata: MetadataSynthesis) -> qiskit.QuantumCirc
     random.shuffle(full_pool)
 
     qc = qiskit.QuantumCircuit(num_qubits)
-    rotation_index = 1  # Index for theta parameters
+    rotation_index = 0  # Index for theta parameters
     while full_pool:
         remaining_qubits = list(range(num_qubits))
         random.shuffle(remaining_qubits)

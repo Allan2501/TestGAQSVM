@@ -51,12 +51,19 @@ def by_num_rotation_gate(num_rotation: int) -> qiskit.QuantumCircuit:
     """
     def by_num_rotation_gate_func(qc: qiskit.QuantumCircuit):
         # Nếu số lượng rotation gates trong mạch nhỏ hơn hoặc bằng giới hạn, trả về mạch ban đầu
-        rotation_count = sum(1 for inst in qc if inst[0].name in ['rx', 'ry', 'rz'])
-        if rotation_count <= num_rotation:
+        rotation_count = len(qc.parameters)
+        if rotation_count == num_rotation:
             return qc
-        
-        # Ngược lại, sử dụng hàm divider để cắt mạch
-        qc1, _ = (divider_by_num_rotation_gate(num_rotation))(qc)
+        elif rotation_count < num_rotation:
+            num_qubits = len(range(qc.num_qubits))
+            thetas = qiskit.circuit.ParameterVector('eta', num_rotation - rotation_count)
+            j = 0
+            for i in range(rotation_count, num_rotation):
+                qc.rx(thetas[j], i % num_qubits)
+                j += 1
+            return qc
+        else:
+            qc1, _ = (divider_by_num_rotation_gate(num_rotation))(qc)
         return qc1
 
     return by_num_rotation_gate_func

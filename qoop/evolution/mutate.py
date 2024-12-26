@@ -30,6 +30,25 @@ def specific_mutate(qc: qiskit.QuantumCircuit, pool, index: int) -> qiskit.Quant
         qc.data[index] = (gate, [target_qubits[0], target_qubits[1]] if len(target_qubits) > 1 else [target_qubits[0]], [])
     return qc
 
+def bitflip_mutate_with_normalizer(pool, normalizer_func, prob_mutate: float = 0.1) -> qiskit.QuantumCircuit:
+    """Mutate at every position in circuit with probability = prob_mutate
+
+    Args:
+        - qc (qiskit.QuantumCircuit): Input circuit
+        - prob_mutate (float, optional): Mutate probability. Defaults to 0.1.
+
+    Returns:
+        - qiskit.QuantumCircuit: Bit flipped circuit
+    """
+    def bitflip_mutate_func(qc: qiskit.QuantumCircuit) -> qiskit.QuantumCircuit:
+        num_gates = len(qc.data)
+        for index in range(0, num_gates):
+            if random.random() < prob_mutate:
+                qc = specific_mutate(qc, pool, index = index)  
+        return normalizer_func(qc)
+    return bitflip_mutate_func
+
+
 def bitflip_mutate(pool, prob_mutate: float = 0.1) -> qiskit.QuantumCircuit:
     """Mutate at every position in circuit with probability = prob_mutate
 

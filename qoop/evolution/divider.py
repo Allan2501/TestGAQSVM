@@ -119,18 +119,17 @@ def by_num_rotation_gate(k: int) -> typing.List[qiskit.QuantumCircuit]:
     def by_num_rotation_gate_func(qc: qiskit.QuantumCircuit):
         if k < 0:
             raise ValueError("The number of ROTATION gates must be >= 0")
-
         qc1 = qiskit.QuantumCircuit(qc.num_qubits)
         qc2 = qiskit.QuantumCircuit(qc.num_qubits)
         rotation_count = 0
         stop = 0
 
         for i in range(len(qc)):
-            if qc[i][0].name == 'rx' or qc[i][0].name == 'ry' or qc[i][0].name == 'rz': ###
+            if qc[i][0].name in ['rx','ry','rz']: ###
                 rotation_count += 1
             qc1.append(qc[i][0], qc[i][1])
             stop += 1
-            if rotation_count == k and i + 1 < len(qc) and qc[i+1][0].name in ['rx', 'ry', 'rz']:
+            if rotation_count == k and i + 1 < len(qc):
                 for x in qc[stop:]:
                     qc2.append(x[0], x[1])
                 return qc1, qc2
